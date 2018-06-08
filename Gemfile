@@ -44,10 +44,10 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   gem 'rspec-rails'
-
-  gem 'capybara', '>= 2.15', '< 4.0'
-  
-  gem 'rubocop', '0.57.1', require: false
+  gem 'capybara',           '>= 2.15', '< 4.0'
+  gem 'rubocop',            '0.57.1', require: false
+  gem 'factory_girl_rails', '4.9.0'
+  gem 'faker',              '1.8.7'
 end
 
 group :development do

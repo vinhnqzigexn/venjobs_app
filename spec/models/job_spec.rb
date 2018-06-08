@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Job, type: :model do
@@ -22,7 +24,6 @@ RSpec.describe Job, type: :model do
         should have_db_index(:city_id)
         should have_db_index(:company_id)
         should have_db_index(:industry_id)
-        should have_db_index([:title, :update_date])
       end
     end
 
@@ -33,5 +34,20 @@ RSpec.describe Job, type: :model do
         should belong_to(:industry).with_foreign_key('industry_id')
       end
     end
+  end
+
+  let(:job) do
+    Job.new(title: 'dev',
+            company_id: 1,
+            city_id: 1,
+            industry_id: 1,
+            position: 'junior',
+            salary: 2000.00,
+            expiry_date: 1.month.from_now,
+            description: 'abcdef',
+            update_date: Time.now,
+            published: true,
+            welfare: 'abc',
+            condition: 'def')
   end
 end
