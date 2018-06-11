@@ -1,11 +1,11 @@
 class CreateCities < ActiveRecord::Migration[5.2]
   def change
     create_table :cities do |t|
-      t.string :name, limit: 50
-      t.string :city_type, limit: 50
-      t.string :slug, limit: 50
-      t.string :name_with_type, limit: 50
-      t.string :path, limit: 50
+      t.string :name
+      t.string :city_type
+      t.string :slug
+      t.string :name_with_type
+      t.string :path
       t.integer :code
       t.integer :parent_code
 

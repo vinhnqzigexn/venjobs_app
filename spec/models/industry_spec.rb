@@ -7,9 +7,10 @@ RSpec.describe Industry, type: :model do
 
   describe 'db schema' do
     it { should have_db_column(:name).of_type(:string) }
+    it { should have_many(:jobs).dependent(:destroy) }
   end
 
-  it 'should be validates' do
+  it 'right values input' do
     expect(industry).to be_valid
   end
 
@@ -21,6 +22,3 @@ RSpec.describe Industry, type: :model do
     end
   end
 end
-
-
-

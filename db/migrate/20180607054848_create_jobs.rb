@@ -5,7 +5,7 @@ class CreateJobs < ActiveRecord::Migration[5.2]
       t.references :company, foreign_key: true
       t.references :city, foreign_key: true
       t.references :industry, foreign_key: true
-      t.string :position, limit: 55
+      t.string :position
       t.decimal :salary, precision: 12, scale: 2
       t.datetime :expiry_date
       t.text :description
