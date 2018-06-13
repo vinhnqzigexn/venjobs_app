@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_07_084045) do
+ActiveRecord::Schema.define(version: 2018_06_12_070531) do
 
   create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name", limit: 50
-    t.string "city_type", limit: 50
-    t.string "slug", limit: 50
-    t.string "name_with_type", limit: 50
-    t.string "path", limit: 50
+    t.string "name"
+    t.string "city_type"
+    t.string "slug"
+    t.string "name_with_type"
+    t.string "path"
     t.integer "code"
     t.integer "parent_code"
     t.datetime "created_at", null: false
@@ -29,11 +29,29 @@ ActiveRecord::Schema.define(version: 2018_06_07_084045) do
     t.text "description"
     t.string "address"
     t.string "email"
-    t.string "phone", limit: 20
-    t.string "fax", limit: 20
-    t.string "number_of_employees", limit: 20
+    t.string "phone"
+    t.string "fax"
+    t.string "number_of_employees"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "entries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "job_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_entries_on_job_id"
+    t.index ["user_id"], name: "index_entries_on_user_id"
+  end
+
+  create_table "favorite_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "job_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_favorite_jobs_on_job_id"
+    t.index ["user_id"], name: "index_favorite_jobs_on_user_id"
   end
 
   create_table "industries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -47,7 +65,7 @@ ActiveRecord::Schema.define(version: 2018_06_07_084045) do
     t.bigint "company_id"
     t.bigint "city_id"
     t.bigint "industry_id"
-    t.string "position", limit: 55
+    t.string "position"
     t.decimal "salary", precision: 12, scale: 2
     t.datetime "expiry_date"
     t.text "description"
@@ -55,6 +73,7 @@ ActiveRecord::Schema.define(version: 2018_06_07_084045) do
     t.boolean "published"
     t.text "welfare"
     t.text "condition"
+    t.text "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["city_id"], name: "index_jobs_on_city_id"
@@ -66,7 +85,7 @@ ActiveRecord::Schema.define(version: 2018_06_07_084045) do
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", default: "", null: false
-    t.string "title", default: ""
+    t.string "prefix", default: ""
     t.string "phone", default: ""
     t.boolean "registration", default: false
     t.string "email", default: "", null: false
@@ -85,6 +104,10 @@ ActiveRecord::Schema.define(version: 2018_06_07_084045) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "entries", "jobs"
+  add_foreign_key "entries", "users"
+  add_foreign_key "favorite_jobs", "jobs"
+  add_foreign_key "favorite_jobs", "users"
   add_foreign_key "jobs", "cities"
   add_foreign_key "jobs", "companies"
   add_foreign_key "jobs", "industries"

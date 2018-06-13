@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class City < ApplicationRecord
-  validates :name,  presence: true, length: { maximum: 50 },
+  has_many  :jobs, dependent: :destroy
+  
+  validates :name,  presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }
-  validates :city_type, length: { maximum: 50 }
-  validates :slug, length: { maximum: 50 }
-  validates :name_with_type, length: { maximum: 50 }
-  validates :path, length: { maximum: 50 }
+  validates :city_type, length: { maximum: 255 }
+  validates :slug, length: { maximum: 255 }
+  validates :name_with_type, length: { maximum: 255 }
+  validates :path, length: { maximum: 255 }
 end

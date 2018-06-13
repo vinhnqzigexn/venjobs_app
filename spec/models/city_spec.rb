@@ -15,22 +15,24 @@ RSpec.describe City, type: :model do
       should have_db_column(:code).of_type(:integer)
       should have_db_column(:parent_code).of_type(:integer)
     end
+
+    it { should have_many(:jobs).dependent(:destroy) }
   end
 
-  it 'should be validates' do
+  it 'right values input' do
     expect(city).to be_valid
   end
 
   describe 'validations' do
     it do
       should validate_presence_of(:name)
-      should validate_length_of(:name).is_at_most(50)
+      should validate_length_of(:name).is_at_most(255)
       should validate_uniqueness_of(:name).case_insensitive
 
-      should validate_length_of(:city_type).is_at_most(50)
-      should validate_length_of(:slug).is_at_most(50)
-      should validate_length_of(:name_with_type).is_at_most(50)
-      should validate_length_of(:path).is_at_most(50)
+      should validate_length_of(:city_type).is_at_most(255)
+      should validate_length_of(:slug).is_at_most(255)
+      should validate_length_of(:name_with_type).is_at_most(255)
+      should validate_length_of(:path).is_at_most(255)
     end
   end
 end
