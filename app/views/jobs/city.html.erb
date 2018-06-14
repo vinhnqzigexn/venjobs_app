@@ -1,0 +1,13 @@
+<h3>show all <%= pluralize(@cities.count, 'city') %></h3>
+
+<ul class='list-group'>
+  <% @cities.each do |city| %>
+        <li class = 'list-group-item'>
+          <%= city.name %>
+          <%= link_to pluralize(number_of_jobs_in_city(city.id), 'job'),
+                      controller: 'jobs',
+                      action: 'jobs_in_city',
+                      slug: city.slug %>
+        </li>
+  <% end %>
+</ul>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :importdb do
   require 'pry'
   require 'json'
@@ -10,15 +12,14 @@ namespace :importdb do
     provs = Redis.new
     provs_hash_arr = provs.smembers 'cities'
     provs_hash = JSON.parse(provs_hash_arr[0])
-    provs_hash.each do |code, prov|
-      City.create!( name:           prov['name'],
-                    slug:           prov['slug'],
-                    city_type:      prov['type'],
-                    name_with_type: prov['name_with_type'],
-                    code:           prov['code'])
+    provs_hash.each do |_code, prov|
+      City.create!(name:           prov['name'],
+                   slug:           prov['slug'],
+                   city_type:      prov['type'],
+                   name_with_type: prov['name_with_type'],
+                   code:           prov['code'])
     end
   end
-
 
   desc 'import data to companies table'
   task companies: :environment do
@@ -48,12 +49,12 @@ namespace :importdb do
     jobs_redis = Redis.new
     jobs_yaml_arr = jobs_redis.smembers 'crawled'
     jobs_yaml_arr.each do |row|
-      job = YAML.load(row)
-       next if job[1].blank? || !!Job.find_by(title: job[1]) || !!Job.find_by(link: job[14])
-       Job.create!(
+      job = YAML.safe_load(row)
+      next if job[1].blank? || !!Job.find_by(title: job[1]) || !!Job.find_by(link: job[14])
+      Job.create!(
         title: job[1],
         company_id: 1,
-        city_id: 1,
+        city_id: get_city_id(job[3]),
         industry_id: 1,
         position: 'NA',
         salary: '1_000',
@@ -63,8 +64,20 @@ namespace :importdb do
         published: true,
         welfare: 'NA',
         condition: 'NA',
-        link: job[14],
-       )
+        link: job[14]
+      )
+    end
+  end
+
+  # Return id of city id database
+  def get_city_id(city_name = 'Hồ Chí Minh')
+    city_query = City.where(name: city_name)
+    if city_query.any?
+      city_query.each do |city|
+        return city['id']
+      end
+    else
+      return 59
     end
   end
 end

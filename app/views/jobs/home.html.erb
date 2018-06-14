@@ -1,0 +1,36 @@
+<div class='container'>
+  <div class='container'>
+    <nav class='navbar navbar-light bg-light'>
+      <%= form_tag( jobs_path,
+                    method: 'get',
+                    class: 'form-inline') do %>
+        <%= text_field_tag :search, params[:search],
+                        placeholder: 'Search Jobs',
+                        class: 'form-control mr-sm-2'%>
+        <%= submit_tag 'Search', name: nil,
+                        class: 'btn btn-outline-success my-2 my-sm-0' %>
+      <% end %>
+    </nav>
+  </div>
+
+  <div class='jobs-list'>
+    <ul>
+      <%= render @jobs %>
+    </ul>
+  </div>
+
+  <h4> Cities list </h4>
+  <div class='cities-list'>
+    <ul>
+      <% @cities.each do |city| %>
+        <li>
+          <%= city.name %>
+          <%= link_to pluralize(number_of_jobs_in_city(city.id), 'job'),
+                      controller: 'jobs',
+                      action: 'jobs_in_city',
+                      slug: city.slug %>
+        </li>
+      <% end %>
+    </ul>
+  </div
+</div>

@@ -26,4 +26,11 @@ class Job < ApplicationRecord
   validates :welfare, presence: true, length: { maximum: 1000 }
   validates :condition, presence: true, length: { maximum: 1000 }
   validates :link, presence: true
+
+  paginates_per 10
+
+  def self.search(search)
+    # where("name LIKE ? OR ingredients LIKE ? OR cooking_instructions LIKE ?", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%") 
+    where("title LIKE ?", "%#{search}%")
+  end
 end
