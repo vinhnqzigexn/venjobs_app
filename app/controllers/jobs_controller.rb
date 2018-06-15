@@ -1,6 +1,7 @@
 class JobsController < ApplicationController
   def index
-    @jobs = Job.search(params[:search]).order('created_at DESC').page(params[:page])
+    # @jobs = Job.search(params[:search]).order('created_at DESC').page(params[:page])
+      @jobs = get_jobs_rsolr(params[:search])
   end
 
   def show
@@ -23,5 +24,21 @@ class JobsController < ApplicationController
 
   def get_jobs_in_city(city_id)
     Job.where(city_id: city_id)
+  end
+
+  def get_jobs_rsolr(title = '*')
+    solr = RSolr.connect url: 'http://localhost:8983/solr/gettingstarted/'
+    search_params = { q: "*:*", fl: "job_title:#{title.inspect}", rows: 5_000 }
+    response_solr = solr.get 'select', params: search_params
+    job_ids =  if response_solr['response']['docs'].any?
+                  response_solr['response']['docs'].collect do |row|
+                                  row['job_id']
+                  end
+                end
+    unless job_ids.nil?
+      job_ids.collect do |job_id|
+        Job.where(id: job_id).first
+      end
+    end
   end
 end
