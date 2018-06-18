@@ -1,4 +1,4 @@
-<h1>View jobs</h1>
+<h3>Search result: <%= pluralize(@job_ids.length, 'job') unless @job_ids.blank?%></h3>
 
 <nav class='navbar navbar-light bg-light'>
     <%= form_tag(jobs_path, method: 'get',
@@ -12,6 +12,6 @@
 </nav>
 
 <ul class='jobs'>
-  <%#= paginate @jobs, outer_window: 3 %>
-  <%= render @jobs unless @jobs.blank? %>
+  <%= paginate @jobs, outer_window: 3 %>
+  <%= render @jobs %>
 </ul>
