@@ -2,8 +2,14 @@
 
 class Job < ApplicationRecord
   belongs_to :company, foreign_key: 'company_id'
-  belongs_to :city, foreign_key: 'city_id'
-  belongs_to :industry, foreign_key: 'industry_id'
+
+  has_many :cities_jobs,  foreign_key: 'job_id',
+                          dependent: :destroy
+  has_many :cities, through: :cities_jobs
+
+  has_many :industries_jobs,  foreign_key: 'job_id',
+                              dependent: :destroy
+  has_many :industries, through: :industries_jobs
 
   has_many  :entries, dependent: :destroy
   has_many  :favorite_jobs, dependent: :destroy
@@ -26,4 +32,10 @@ class Job < ApplicationRecord
   validates :welfare, presence: true, length: { maximum: 1000 }
   validates :condition, presence: true, length: { maximum: 1000 }
   validates :link, presence: true
+
+  paginates_per 10
+
+  def self.search(search)
+    where("title LIKE ?", "%#{search}%")
+  end
 end

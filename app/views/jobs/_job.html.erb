@@ -1,0 +1,11 @@
+<li>
+  <div class="card" style="width: 40rem;">
+    <div class="card-body">
+      <h5 class="card-title"><%= job.title %></h5>
+      <p class="card-text">some job description</p>
+      <p>Update date: <%= time_ago_in_words(job.created_at) %> ago. </p>
+      <!-- <a href="#" class="card-link">Show job</a> -->
+      <%= link_to 'Show job', job, class: 'card-link' %>
+    </div>
+  </div>
+</li>

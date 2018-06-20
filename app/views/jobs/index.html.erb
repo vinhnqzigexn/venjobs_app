@@ -1,0 +1,17 @@
+<h3>Search result: <%= pluralize(@job_ids.length, 'job') unless @job_ids.blank?%></h3>
+
+<nav class='navbar navbar-light bg-light'>
+    <%= form_tag(jobs_path, method: 'get',
+                        class: 'form-inline') do %>
+        <%= text_field_tag :search, params[:search],
+                        placeholder: 'Search Jobs',
+                        class: 'form-control mr-sm-2'%>
+        <%= submit_tag 'Search', name: nil,
+                        class: 'btn btn-outline-success my-2 my-sm-0' %>
+    <% end %>
+</nav>
+
+<ul class='jobs'>
+  <%= paginate @jobs, outer_window: 3 %>
+  <%= render @jobs %>
+</ul>

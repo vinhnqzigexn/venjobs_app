@@ -19,22 +19,22 @@ RSpec.describe Job, type: :model do
 
       it { should have_many(:entries).dependent(:destroy) }
       it { should have_many(:favorite_jobs).dependent(:destroy) }
+      it { should have_many(:cities_jobs).dependent(:destroy) }
+      it { should have_many(:cities).through(:cities_jobs) }
+      it { should have_many(:industries_jobs).dependent(:destroy) }
+      it { should have_many(:industries).through(:industries_jobs) }
     end
 
     context 'index' do
       it do
         should have_db_index(:title)
-        should have_db_index(:city_id)
         should have_db_index(:company_id)
-        should have_db_index(:industry_id)
       end
     end
 
     context 'foreign key' do
       it do
         should belong_to(:company).with_foreign_key('company_id')
-        should belong_to(:city).with_foreign_key('city_id')
-        should belong_to(:industry).with_foreign_key('industry_id')
       end
     end
   end
@@ -45,9 +45,7 @@ RSpec.describe Job, type: :model do
   let(:job) do
     FactoryGirl.create(
       :job,
-      company_id: company.id,
-      city_id: city.id,
-      industry_id: industry.id
+      company_id: company.id
     )
   end
 
