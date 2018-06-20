@@ -3,8 +3,6 @@ class CreateJobs < ActiveRecord::Migration[5.2]
     create_table :jobs do |t|
       t.string :title, index: true
       t.references :company, foreign_key: true
-      t.references :city, foreign_key: true
-      t.references :industry, foreign_key: true
       t.string :position
       t.decimal :salary, precision: 12, scale: 2
       t.datetime :expiry_date

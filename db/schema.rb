@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_12_070531) do
+ActiveRecord::Schema.define(version: 2018_06_19_011959) do
 
   create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -22,6 +22,17 @@ ActiveRecord::Schema.define(version: 2018_06_12_070531) do
     t.integer "parent_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name", "slug"], name: "index_cities_on_name_and_slug"
+  end
+
+  create_table "cities_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "job_id"
+    t.bigint "city_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city_id"], name: "index_cities_jobs_on_city_id"
+    t.index ["job_id", "city_id"], name: "index_cities_jobs_on_job_id_and_city_id", unique: true
+    t.index ["job_id"], name: "index_cities_jobs_on_job_id"
   end
 
   create_table "companies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -55,16 +66,27 @@ ActiveRecord::Schema.define(version: 2018_06_12_070531) do
   end
 
   create_table "industries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "code"
     t.string "name"
+    t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_industries_on_name"
+  end
+
+  create_table "industries_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "job_id"
+    t.bigint "industry_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["industry_id"], name: "index_industries_jobs_on_industry_id"
+    t.index ["job_id", "industry_id"], name: "index_industries_jobs_on_job_id_and_industry_id", unique: true
+    t.index ["job_id"], name: "index_industries_jobs_on_job_id"
   end
 
   create_table "jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "title"
     t.bigint "company_id"
-    t.bigint "city_id"
-    t.bigint "industry_id"
     t.string "position"
     t.decimal "salary", precision: 12, scale: 2
     t.datetime "expiry_date"
@@ -76,9 +98,7 @@ ActiveRecord::Schema.define(version: 2018_06_12_070531) do
     t.text "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["city_id"], name: "index_jobs_on_city_id"
     t.index ["company_id"], name: "index_jobs_on_company_id"
-    t.index ["industry_id"], name: "index_jobs_on_industry_id"
     t.index ["title", "update_date"], name: "index_jobs_on_title_and_update_date"
     t.index ["title"], name: "index_jobs_on_title"
   end
@@ -104,11 +124,13 @@ ActiveRecord::Schema.define(version: 2018_06_12_070531) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "cities_jobs", "cities"
+  add_foreign_key "cities_jobs", "jobs"
   add_foreign_key "entries", "jobs"
   add_foreign_key "entries", "users"
   add_foreign_key "favorite_jobs", "jobs"
   add_foreign_key "favorite_jobs", "users"
-  add_foreign_key "jobs", "cities"
+  add_foreign_key "industries_jobs", "industries"
+  add_foreign_key "industries_jobs", "jobs"
   add_foreign_key "jobs", "companies"
-  add_foreign_key "jobs", "industries"
 end

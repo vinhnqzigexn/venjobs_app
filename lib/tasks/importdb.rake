@@ -9,16 +9,15 @@ namespace :importdb do
 
   desc 'import data to cities table'
   task cities: :environment do
-    provs = Redis.new
-    provs_hash_arr = provs.smembers 'cities'
-    provs_hash = JSON.parse(provs_hash_arr[0])
-    provs_hash.each do |_code, prov|
-      City.create!(name:           prov['name'],
-                   slug:           prov['slug'],
-                   city_type:      prov['type'],
-                   name_with_type: prov['name_with_type'],
-                   code:           prov['code'])
-    end
+    city_redis = Redis.new
+    city_yaml_arr = city_redis.smembers('cities')
+    city_yaml_arr.each do |row|
+      city  = YAML.safe_load(row)
+      next if City.find_by(name: city[1])
+      City.create!( code: city[0],
+                    name: city[1],
+                    slug: city[2])
+      end
   end
 
   desc 'import data to companies table'
@@ -36,11 +35,14 @@ namespace :importdb do
 
   desc 'seed industries data'
   task industries: :environment do
-    path = Rails.root.join('db', 'industries.csv')
-    CSV.foreach(path) do |csv|
-      Industry.create(
-        name: csv[1]
-      )
+  inds_redis = Redis.new
+  inds_yaml_arr = inds_redis.smembers('industry')
+  inds_yaml_arr.each do |row|
+    ind  = YAML.safe_load(row)
+    next if Industry.find_by(name: ind[1])
+    Industry.create!( code: ind[0],
+                      name: ind[1],
+                      slug: ind[2] )
     end
   end
 
@@ -48,36 +50,44 @@ namespace :importdb do
   task jobs: :environment do
     jobs_redis = Redis.new
     jobs_yaml_arr = jobs_redis.smembers 'crawled'
-    jobs_yaml_arr.each do |row|
+    jobs_yaml_arr.each_with_index do |row,id|
+      # break if id == 3
       job = YAML.safe_load(row)
       next if job[1].blank? || !!Job.find_by(title: job[1]) || !!Job.find_by(link: job[14])
-      Job.create!(
-        title: job[1],
-        company_id: 1,
-        city_id: get_city_id(job[3]),
-        industry_id: 1,
-        position: 'NA',
-        salary: '1_000',
-        expiry_date: Time.now,
-        description: 'NA',
-        update_date: Time.now,
-        published: true,
-        welfare: 'NA',
-        condition: 'NA',
-        link: job[14]
-      )
-    end
-  end
-
-  # Return id of city id database
-  def get_city_id(city_name = 'Hồ Chí Minh')
-    city_query = City.where(name: city_name)
-    if city_query.any?
-      city_query.each do |city|
-        return city['id']
+      job_new = Job.create!(
+                  title: job[1],
+                  company_id: 1,
+                  position: 'NA',
+                  salary: '1_000',
+                  expiry_date: Time.now,
+                  description: 'NA',
+                  update_date: Time.now,
+                  published: true,
+                  welfare: 'NA',
+                  condition: 'NA',
+                  link: job[14]
+                )
+      # import job industry
+      industry_arr = job[5].split('+').map { |ind| ind.strip }
+      if industry_arr.any?
+        industry_arr.each do |ind|
+          ind_id = Industry.find_by(name: ind).id || Industry.first.id
+          job_new.industries_jobs.create!(industry_id: ind_id)
+        end
+      else
+        job_new.industries_jobs.create!(industry_id: City.first.id)
       end
-    else
-      return 59
+
+      # import job industry
+      city_arr = job[3].split(',').map { |city| city.strip }
+      if city_arr.any?
+        city_arr.each do |city|
+          city_id = City.find_by(name: city).id || City.first.id
+          job_new.cities_jobs.create!(city_id: city_id)
+        end
+      else
+        job_new.cities_jobs.create!(city_id: City.first.id)
+      end
     end
   end
 end

@@ -1,5 +1,4 @@
-<h4><%= @city.name %> have <%= pluralize(number_of_jobs_in_city(@city.id), 'job') %></h4> 
-<%#= link_to 'Back', city_jobs_path %>
+<h4><%= @city.name %>: <%= pluralize(@city.jobs.count, 'job') %></h4>
 <div class='container'>
   <div class='jobs-list'>
     <ul>

@@ -16,7 +16,8 @@ RSpec.describe City, type: :model do
       should have_db_column(:parent_code).of_type(:integer)
     end
 
-    it { should have_many(:jobs).dependent(:destroy) }
+    it { should have_many(:cities_jobs).dependent(:destroy) }
+    it { should have_many(:jobs).through(:cities_jobs) }
   end
 
   it 'right values input' do

@@ -25,7 +25,7 @@
       <% @cities.each do |city| %>
         <li>
           <%= city.name %>
-          <%= link_to pluralize(number_of_jobs_in_city(city.id), 'job'),
+          <%= link_to pluralize(city.jobs.count, 'job'),
                       controller: 'jobs',
                       action: 'jobs_in_city',
                       slug: city.slug %>

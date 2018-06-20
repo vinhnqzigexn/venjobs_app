@@ -7,7 +7,8 @@ RSpec.describe Industry, type: :model do
 
   describe 'db schema' do
     it { should have_db_column(:name).of_type(:string) }
-    it { should have_many(:jobs).dependent(:destroy) }
+    it { should have_many(:industries_jobs).dependent(:destroy) }
+    it { should have_many(:jobs).through(:industries_jobs) }
   end
 
   it 'right values input' do
