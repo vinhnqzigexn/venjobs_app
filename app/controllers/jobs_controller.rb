@@ -1,8 +1,14 @@
+# frozen_string_literal: true
+
 class JobsController < ApplicationController
   def index
-    # @jobs = Job.search(params[:search]).order('created_at DESC').page(params[:page])
-      @job_ids = get_jobs_rsolr(params[:search] || '*')
-      @jobs = Job.where(id: @job_ids).order('created_at DESC').page(params[:page])
+    search_str = params[:search].blank? ? '*' : params[:search]
+    job_found = Job.search(kw: search_str, page: params[:page].to_i)
+    job_ids = job_found[:job_id]
+    @job_num = job_found[:num]
+    job_search_result = Job.where(id: job_ids)
+    @jobs = Kaminari.paginate_array(job_search_result, total_count: @job_num)
+                    .page(params[:page])
   end
 
   def show
@@ -20,17 +26,6 @@ class JobsController < ApplicationController
 
   def home
     @jobs = Job.all.order(updated_at: :desc).take(5)
-    @cities = City.all.select{ |city| city.jobs.any? }.take(8)
-  end
-
-  def get_jobs_rsolr(title = '*')
-    solr = RSolr.connect url: 'http://localhost:8983/solr/gettingstarted/'
-    search_params = { q: "search_text:*#{title.downcase}*", rows: 5_000 }
-    response_solr = solr.get 'select', params: search_params
-    if response_solr['response']['docs'].any?
-      response_solr['response']['docs'].collect do |row|
-        row['job_id']
-      end
-    end
+    @cities = City.all.select { |city| city.jobs.any? }.take(8)
   end
 end

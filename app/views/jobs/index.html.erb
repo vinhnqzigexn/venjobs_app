@@ -1,4 +1,4 @@
-<h3>Search result: <%= pluralize(@job_ids.length, 'job') unless @job_ids.blank?%></h3>
+<h3>Search result: <%= pluralize(@job_num , 'job') %></h3>
 
 <nav class='navbar navbar-light bg-light'>
     <%= form_tag(jobs_path, method: 'get',
@@ -11,7 +11,5 @@
     <% end %>
 </nav>
 
-<ul class='jobs'>
-  <%= paginate @jobs, outer_window: 3 %>
+  <%= paginate @jobs%>
   <%= render @jobs %>
-</ul>

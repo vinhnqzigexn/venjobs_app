@@ -11,6 +11,8 @@ gem 'jquery-rails'
 gem 'kaminari'
 gem 'rsolr'
 gem 'rsolr-ext'
+gem 'config'
+gem 'twitter-bootstrap-rails', :group => :assets 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.0'
