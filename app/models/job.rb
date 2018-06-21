@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Job < ApplicationRecord
-  attr_accessor :page_per
   belongs_to :company, foreign_key: 'company_id'
 
   has_many :cities_jobs,  foreign_key: 'job_id',
@@ -34,8 +33,6 @@ class Job < ApplicationRecord
   validates :condition, presence: true, length: { maximum: 1000 }
   validates :link, presence: true
 
-  @page_per = 10
-  paginates_per @page_per
 
   def self.search(search_hash = { kw: '*', page: 0})
     jobs = { job_id: [], job_num: 0 }
