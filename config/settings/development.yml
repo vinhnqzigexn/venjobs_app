@@ -1,0 +1,4 @@
+solr:
+  url: "http://localhost:8983/solr/gettingstarted/"
+  row: 25
+  df: "search_text"

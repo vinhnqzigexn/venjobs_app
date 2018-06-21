@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Job < ApplicationRecord
+  attr_accessor :page_per
   belongs_to :company, foreign_key: 'company_id'
 
   has_many :cities_jobs,  foreign_key: 'job_id',
@@ -33,9 +34,22 @@ class Job < ApplicationRecord
   validates :condition, presence: true, length: { maximum: 1000 }
   validates :link, presence: true
 
-  paginates_per 10
+  @page_per = 10
+  paginates_per @page_per
 
-  def self.search(search)
-    where("title LIKE ?", "%#{search}%")
+  def self.search(search_hash = { kw: '*', page: 0})
+    jobs = { job_id: [], job_num: 0 }
+    solr = RSolr.connect url: Settings.solr.url
+    search_params = { q: "search_text:#{search_hash[:kw]}",
+                      start: search_hash[:page] * Kaminari.config.default_per_page,
+                      rows: Kaminari.config.default_per_page }
+    response_solr = solr.get 'select', params: search_params
+    if response_solr['response']['numFound'] > 0
+      jobs[:num] = response_solr['response']['numFound']
+      response_solr['response']['docs'].collect do |row|
+        jobs[:job_id] << row['job_id']
+      end
+    end
+    jobs
   end
 end
