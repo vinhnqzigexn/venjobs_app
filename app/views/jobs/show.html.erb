@@ -10,6 +10,10 @@
     <p>
       <%= @job.description %>
     </p>
+
+    <%= link_to "Apply", apply_path(job_id: @job.id),
+                         class: "btn btn-primary" %>
+
     </section> 
   </aside>
 </div>

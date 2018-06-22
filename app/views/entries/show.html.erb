@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+<% @job = Job.find(@entry.job_id) %>
+<h3>Id: <%= @job.id %> -- Job_title: <%= @job.title %> </h3>
+
+<p>
+  <strong>Name:</strong>
+  <%= @entry.entry_name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @entry.entry_email %>
+</p>
+
+<%= link_to 'Edit', edit_entry_path(@entry) %> |
+<%= link_to 'Back', entries_path %>

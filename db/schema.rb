@@ -50,9 +50,12 @@ ActiveRecord::Schema.define(version: 2018_06_19_011959) do
   create_table "entries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "job_id"
+    t.string "entry_name"
+    t.string "entry_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_entries_on_job_id"
+    t.index ["user_id", "job_id"], name: "index_entries_on_user_id_and_job_id", unique: true
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 

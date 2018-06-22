@@ -1,0 +1,29 @@
+<%= form_with(model: entry, local: true) do |form| %>
+  <% if entry.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(entry.errors.count, "error") %> prohibited this entry from being saved:</h2>
+
+      <ul>
+      <% entry.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= hidden_field_tag :job_id, @job.id %>
+
+  <%= form.label :name %><br>
+  <%= form.text_field :entry_name, class: 'form-control' %><br>
+
+  <%= form.label :email %><br>
+  <%= form.email_field :entry_email, class: 'form-control' %><br>
+
+  <%= form.submit yield(:button_text), class: "btn btn-primary" %>
+
+
+<% end %>
+
+
+
+
