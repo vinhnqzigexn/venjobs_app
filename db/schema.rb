@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_19_011959) do
+ActiveRecord::Schema.define(version: 2018_06_22_063322) do
 
   create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -52,7 +52,11 @@ ActiveRecord::Schema.define(version: 2018_06_19_011959) do
     t.bigint "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "entry_name"
+    t.string "entry_email"
+    t.string "entry_phone"
     t.index ["job_id"], name: "index_entries_on_job_id"
+    t.index ["user_id", "job_id"], name: "index_entries_on_user_id_and_job_id", unique: true
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 

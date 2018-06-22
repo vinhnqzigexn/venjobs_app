@@ -13,6 +13,7 @@ gem 'rsolr'
 gem 'rsolr-ext'
 gem 'config'
 gem 'twitter-bootstrap-rails', :group => :assets 
+gem 'gretel'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.0'
@@ -57,6 +58,8 @@ group :development, :test do
   gem 'rubocop',            '0.57.1', require: false
   gem 'factory_girl_rails', '4.9.0'
   gem 'faker',              '1.8.7'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :development do

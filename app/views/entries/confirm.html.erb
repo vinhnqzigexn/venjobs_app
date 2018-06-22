@@ -1,0 +1,18 @@
+<% @job = Job.find(params[:job_id]) %>
+<% @user = User.find(params[:user_id]) %>
+<h3> Apply Job: <%= @job.title %></h3>
+<h3> New > Confirm > Finish </h3>
+
+<p>Job title: <%= @job.title %></p>
+<p>User name: <%= @user.name %></p>
+<p>User email: <%= @user.email %></p>
+
+<%= link_to "Edit", apply_path( job_id: @job.id,
+                                entries: { name: @user.name,
+                                           email: @user.email }),
+                    class: "btn btn-success" %>
+
+<%= link_to "Apply", done_path( job_id: @job.id,
+                                name: @user.name,
+                                email: @user.email),
+                    class: "btn btn-success" %>

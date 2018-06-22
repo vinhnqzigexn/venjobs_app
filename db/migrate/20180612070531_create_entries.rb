@@ -6,5 +6,6 @@ class CreateEntries < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+    add_index :entries, [:user_id, :job_id], unique: true
   end
 end

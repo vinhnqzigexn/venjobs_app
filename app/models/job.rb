@@ -11,6 +11,10 @@ class Job < ApplicationRecord
                               dependent: :destroy
   has_many :industries, through: :industries_jobs
 
+  has_many :entries,  foreign_key: 'job_id',
+                              dependent: :destroy
+  has_many :users, through: :entries
+
   has_many  :entries, dependent: :destroy
   has_many  :favorite_jobs, dependent: :destroy
 

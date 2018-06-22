@@ -1,15 +1,32 @@
 <div class="row">
   <aside class="col-md-16">
     <section class="user_info">
-    <h2>Job detail</h2>
-    
-    <h4>
+    <% breadcrumb :job, @job %>
+    <h3>
       <%= @job.title %>
-    </h4>
+    </h3>
 
+    <h4> Company:  </h4>
+    <p><%= Company.find(@job.company_id).name %></p>
+    <br>
+    
+    <h4> Thanh pho: </h4>
+    <p><%= @job.cities.map(&:name).reject(&:blank?).join(', ') %></p>
+    <br>
+    
+    <h4> Salary </h4>
+    <p><%= @job.salary %></p>
+    
     <p>
       <%= @job.description %>
     </p>
+    <% if user_signed_in? %>
+      <%= link_to "Apply", confirm_path(job_id: @job.id, user_id: current_user.id),
+                          class: "btn btn-success" %>
+    <% else %>
+      <%= link_to "Apply", apply_path(job_id: @job.id),
+                          class: "btn btn-success" %>
+    <% end %>
     </section> 
   </aside>
 </div>

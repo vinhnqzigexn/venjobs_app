@@ -1,0 +1,19 @@
+<h3> Apply Job: <%= @job.title %></h3>
+<h3> Job_id: <%= @job.id %></h3>
+<h3> New > Confirm > Finish </h3>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(:entry, url: apply_path ) do |f| %>
+      <%= f.label :entry_name %>
+      <%= f.text_field :entry_name, class: 'form-control' %><br>
+
+      <%= f.label :entry_email %>
+      <%= f.email_field :entry_email, class: 'form-control' %><br>
+
+      <%= hidden_field_tag :job_id, @job.id %>
+      
+      <%= f.submit "Apply", class: "btn btn-primary" %><br>
+    <% end %>
+  </div>
+</div>
