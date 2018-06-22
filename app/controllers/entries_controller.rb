@@ -37,13 +37,14 @@ class EntriesController < ApplicationController
     @entry.user_id = @user.id
     @entry.job_id = @job.id
 
-    respond_to do |format|
+    if @user.jobs.include?(@job)
+      redirect_to job_url(@job), notice: 'You has been entry this job.'
+    elsif
       if @entry.save
-        format.html { redirect_to @entry, notice: 'Entry was successfully created.' }
-        format.json { render :show, status: :created, location: @entry }
+        UserMailer.job_apply(@user, @job).deliver_now
+        redirect_to @entry, notice: 'Email sent to you, Thank you for apply.'
       else
-        format.html { render :new }
-        format.json { render json: @entry.errors, status: :unprocessable_entity }
+        render :new
       end
     end
   end
@@ -51,25 +52,18 @@ class EntriesController < ApplicationController
   # PATCH/PUT /entries/1
   # PATCH/PUT /entries/1.json
   def update
-    respond_to do |format|
       if @entry.update(entry_params)
-        format.html { redirect_to @entry, notice: 'Entry was successfully updated.' }
-        # format.json { render :show, status: :ok, location: @entry }
+        redirect_to @entry, notice: 'Entry was successfully updated.'
       else
-        format.html { render :edit }
-        # format.json { render json: @entry.errors, status: :unprocessable_entity }
+        render :edit
       end
-    end
   end
 
   # DELETE /entries/1
   # DELETE /entries/1.json
   def destroy
     @entry.destroy
-    respond_to do |format|
-      format.html { redirect_to entries_url, notice: 'Entry was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to entries_url, notice: 'Entry was successfully destroyed.'
   end
 
   private

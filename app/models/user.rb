@@ -25,4 +25,9 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX }
 
   validates :password, presence: true, length: { minimum: 8 }
+
+  # Sends activation email.
+  def send_job_apply_email(job)
+    UserMailer.job_apply(self, job).deliver_now
+  end
 end
