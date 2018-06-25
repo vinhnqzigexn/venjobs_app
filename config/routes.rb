@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root to: 'jobs#home'
   resources :entries
-  
+
   get '/apply', to: 'entries#new'
   resources :jobs do
     collection do

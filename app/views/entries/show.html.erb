@@ -11,5 +11,5 @@
   <%= @entry.entry_email %>
 </p>
 
-<%= link_to 'Edit', edit_entry_path(id: @entry.id) %> |
-<%= link_to 'Back', entries_path %>
+<%= link_to 'Edit', edit_entry_path(id: @entry.id), class: "btn btn-secondary" %>
+<%= link_to 'Back', job_path(@job), class: "btn btn-secondary"  %>
