@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
 class EntriesController < ApplicationController
-  before_action :set_entry, only: [:show, :edit, :update, :destroy]
-
-  # GET /entries
-  # GET /entries.json
-  def index
-    @entries = Entry.all
-  end
+  before_action :set_entry, only: [:show, :edit, :update]
+  before_action :entry_params, only: [:create]
 
   # GET /entries/1
   # GET /entries/1.json
@@ -15,15 +10,15 @@ class EntriesController < ApplicationController
 
   # GET /entries/new
   def new
-    if params[:entry_name].blank? && params[:entry_email]
-      @entry = Entry.new
-    else
-      @entry = Entry.new(entry_name: params[:entry_name], entry_email: params[:entry_email])
-    end
+    @entry = if user_signed_in?
+               Entry.new(entry_name:    current_user.name,
+                         entry_email:   current_user.email,
+                         entry_phone:   current_user.phone,
+                         entry_address: current_user.address)
+             else
+               Entry.new
+             end
   end
-
-  # GET /entries/1/edit
-  def edit; end
 
   # POST /entries
   # POST /entries.json
@@ -32,19 +27,20 @@ class EntriesController < ApplicationController
 
     @job = Job.find(params[:job_id])
 
-    @user = User.find_by(email: params[:entry][:entry_email]) ||
-            User.create(name: params[:entry][:entry_name],
-                        email: params[:entry][:entry_email],
-                        password:              'password',
-                        password_confirmation: 'password')
+    @user = User.find_by(email:  params[:entry][:entry_email]) ||
+            User.create(  name:    params[:entry][:entry_name],
+                          email:   params[:entry][:entry_email],
+                          phone:   params[:entry][:entry_phone],
+                          address: params[:entry][:entry_address])#,
+                          # password:              'password',
+                          # password_confirmation: 'password')
 
     @entry.user_id = @user.id
     @entry.job_id = @job.id
 
-    if @user.jobs.include?(@job)
-      # redirect_to job_url(@job), notice: 'You has been entry this job.'
+    if @user.jobs.find_by(id: @job.id)
       redirect_to job_url(@job), flash: { secondary: 'You has been entry this job.' }
-    elsif
+    else
       if @entry.save
         UserMailer.job_apply(@user, @job).deliver_now
         redirect_to @entry, flash: { secondary: 'Thank you for apply. Please check your email.' }
@@ -64,13 +60,6 @@ class EntriesController < ApplicationController
     end
   end
 
-  # DELETE /entries/1
-  # DELETE /entries/1.json
-  def destroy
-    @entry.destroy
-    redirect_to entries_url, notice: 'Entry was successfully destroyed.'
-  end
-
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -80,6 +69,6 @@ class EntriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def entry_params
-    params.require(:entry).permit(:entry_name, :entry_email)
+    params.require(:entry).permit(:entry_name, :entry_email, :entry_phone, :entry_address)
   end
 end

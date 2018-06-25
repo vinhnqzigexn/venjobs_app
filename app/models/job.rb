@@ -15,8 +15,6 @@ class Job < ApplicationRecord
                       dependent: :destroy
   has_many :users, through: :entries
 
-  has_many  :entries, dependent: :destroy
-  has_many  :favorite_jobs, dependent: :destroy
 
   validates :title, presence: true, length: { maximum: 255 },
                     uniqueness: { case_sensitive: false }

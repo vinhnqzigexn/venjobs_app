@@ -14,10 +14,16 @@
   <%= hidden_field_tag :job_id, @job.id %>
 
   <%= form.label :name %><br>
-  <%= form.text_field :entry_name, class: 'form-control col-sm-4' %><br>
+  <%= form.text_field :entry_name, class: 'form-control col-sm-6' %><br>
 
   <%= form.label :email %><br>
-  <%= form.email_field :entry_email, class: 'form-control col-sm-4' %><br>
+  <%= form.email_field :entry_email, class: 'form-control col-sm-6' %><br>
+
+  <%= form.label :phone %><br>
+  <%= form.telephone_field :entry_phone, class: 'form-control col-sm-6' %><br>
+
+  <%= form.label :address %><br>
+  <%= form.text_area :entry_address, class: 'form-control col-sm-6' %><br>
 
   <%= form.submit yield(:button_text), class: "btn btn-secondary" %>
   <%= link_to 'Back', :back, class: "btn btn-secondary"  %>

@@ -52,6 +52,8 @@ ActiveRecord::Schema.define(version: 2018_06_19_011959) do
     t.bigint "job_id"
     t.string "entry_name"
     t.string "entry_email"
+    t.string "entry_phone"
+    t.text "entry_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_entries_on_job_id"
@@ -111,6 +113,7 @@ ActiveRecord::Schema.define(version: 2018_06_19_011959) do
     t.string "prefix", default: ""
     t.string "phone", default: ""
     t.boolean "registration", default: false
+    t.text "address"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"

@@ -2,7 +2,7 @@
 
 <p>Job title: <%= @job.title %></p>
 <p>Location: <%= @job.cities.first.name %></p>
-<p>Company: <%= Company.find(@job.company_id).name %></p>
+<p>Company: <%= @job.company.name %></p>
 
 <p>Your submitted information:</p>
 <p>Full Name: <%= @user.name %></p>

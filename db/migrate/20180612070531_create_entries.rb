@@ -5,6 +5,8 @@ class CreateEntries < ActiveRecord::Migration[5.2]
       t.references :job, foreign_key: true
       t.string :entry_name
       t.string :entry_email
+      t.string :entry_phone
+      t.text :entry_address
 
       t.timestamps
     end

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root to: 'jobs#home'
-  resources :entries
+  resources :entries, only: [:new, :create, :show, :edit, :update]
 
   get '/apply', to: 'entries#new'
   resources :jobs do
