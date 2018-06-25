@@ -26,14 +26,20 @@ class EntriesController < ApplicationController
     @entry = Entry.new(entry_params)
 
     @job = Job.find(params[:job_id])
+    
+    random_password = Devise.friendly_token
 
-    @user = User.find_by(email:  params[:entry][:entry_email]) ||
-            User.create(  name:    params[:entry][:entry_name],
+    if @user = User.find_by(email:  params[:entry][:entry_email])
+    else 
+      @user = User.new(  name:    params[:entry][:entry_name],
                           email:   params[:entry][:entry_email],
                           phone:   params[:entry][:entry_phone],
-                          address: params[:entry][:entry_address])#,
-                          # password:              'password',
-                          # password_confirmation: 'password')
+                          address: params[:entry][:entry_address],
+                          password:              random_password,
+                          password_confirmation: random_password)
+      @user.skip_confirmation!
+      @user.save!
+    end
 
     @entry.user_id = @user.id
     @entry.job_id = @job.id

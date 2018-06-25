@@ -4,8 +4,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable#,
-        #  :confirmable
+         :recoverable, :rememberable, :validatable,
+         :confirmable
 
   has_many :favorite_jobs, dependent: :destroy
 
@@ -13,7 +13,7 @@ class User < ApplicationRecord
                       dependent: :destroy
   has_many :jobs, through: :entries
 
-  validates :name, presence: true, length: { maximum: 255 }
+  # validates :name, presence: true, length: { maximum: 255 }
 
   # validates :prefix, presence: true
 
@@ -27,8 +27,9 @@ class User < ApplicationRecord
 
   validates :password, presence: true, length: { minimum: 8 }
 
-  # Sends activation email.
+  # Sends apply email.
   def send_job_apply_email(job)
     UserMailer.job_apply(self, job).deliver_now
   end
+
 end
