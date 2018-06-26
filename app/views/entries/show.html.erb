@@ -1,0 +1,15 @@
+<% @job = Job.find(@entry.job_id) %>
+<h3>Id: <%= @job.id %> -- Job_title: <%= @job.title %> </h3>
+
+<p>
+  <strong>Name:</strong>
+  <%= @entry.entry_name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @entry.entry_email %>
+</p>
+
+<%= link_to 'Edit', edit_entry_path(id: @entry.id), class: "btn btn-secondary" %>
+<%= link_to 'Back', job_path(@job), class: "btn btn-secondary"  %>

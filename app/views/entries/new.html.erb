@@ -1,0 +1,6 @@
+<% provide(:button_text, 'Apply') %>
+<% @job = Job.find(params[:job_id]) %>
+<h3>Id: <%= @job.id %> -- Job_title: <%= @job.title %> </h3>
+<% provide(:job_id, @job.id) %>
+
+<%= render 'form', entry: @entry %>
