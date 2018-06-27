@@ -1,36 +1,56 @@
 <div class='container'>
+  <h3>Total: <%= pluralize(Job.count , 'job') %></h3><br>
   <div class='container'>
-    <nav class='navbar navbar-light bg-light'>
-      <%= form_tag( jobs_path,
-                    method: 'get',
-                    class: 'form-inline') do %>
-        <%= text_field_tag :search, params[:search],
-                        placeholder: 'Search Jobs',
+    <%= form_tag( jobs_path,
+                  method: 'get',
+                  class: 'form-inline') do %>
+    <%= text_field_tag :search, params[:search],
+                        placeholder: 'search job',
                         class: 'form-control mr-sm-2'%>
-        <%= submit_tag 'Search', name: nil,
-                        class: 'btn btn-outline-success my-2 my-sm-0' %>
-      <% end %>
-    </nav>
-  </div>
+    <%= submit_tag 'Search', name: nil,
+                    class: 'btn btn-outline-success my-2 my-sm-0' %>
+    <% end %>
+  </div> <br>
 
-  <div class='jobs-list'>
-    <ul>
-      <%= render @jobs %>
+  <div class='container'>
+    <ul class='list-group'>
+      <% @jobs.each do |job| %>
+        <li class='list-group-item link'>
+          <%= link_to job.title, job %>
+        </li>
+      <% end %>  
     </ul>
-  </div>
+  </div><br>
 
-  <h4> Cities list </h4>
-  <div class='cities-list'>
-    <ul>
+  <div class='container'>
+  <h4>City:</h4>
+
+  <div class="container">
+    <div class="row">
       <% @cities.each do |city| %>
-        <li>
+        <div class="col-6 col-md-4 list-group-item">
           <%= city.name %>
           <%= link_to pluralize(city.jobs.count, 'job'),
                       controller: 'jobs',
                       action: 'jobs_in_city',
                       slug: city.slug %>
-        </li>
+        </div>
       <% end %>
-    </ul>
-  </div
+    </div>
+  </div><br>
+
+  <h4>Industry:</h4>
+  <div class="container">
+    <div class="row">
+      <% @industries.each do |industry| %>
+        <div class="col-6 col-md-4 list-group-item">
+          <%= industry.name %>
+          <%= link_to pluralize(industry.jobs.count, 'job'),
+                      controller: 'jobs',
+                      action: 'jobs_in_city',
+                      slug: industry.slug %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

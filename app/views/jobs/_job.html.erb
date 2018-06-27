@@ -1,10 +1,9 @@
-  <div class="card" style="width: 40rem;">
-    <div class="card-body">
-      <h5 class="card-title"><%= job.title %></h5>
-      <p class="card-text">some job description</p>
-      <p>Update date: <%= time_ago_in_words(job.created_at) %> ago. </p>
-      <!-- <a href="#" class="card-link">Show job</a> -->
-      <%= link_to 'Show job', job, class: 'card-link' %>
-    </div>
-  </div>
-  <br>
+<div class='card' style='width: 40rem;'>
+  <span class='card-body'>
+    <h4 class='card-title'><%=link_to job.title, job %></h4>
+    <p class='card-text' ><strong>Description:</strong> <%= job.description.split('.').first %></p>
+    <span class='card-text col-md-4'><strong>Location:</strong> <%= job.cities.map(&:name).reject(&:blank?).join(', ') %> </span>
+    <span class='card-text col-md-4'><strong>Salary:</strong> <%= job.salary %></span><br>
+    <span class='card-link col-md-4'><%= link_to 'Show', job %></span>
+</div>
+<br>

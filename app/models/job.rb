@@ -18,13 +18,15 @@ class Job < ApplicationRecord
                     uniqueness: { case_sensitive: false }
 
   validates :position, presence: true, length: { maximum: 255 }
-  VALID_NUMBER_REGEX = /\A((\d{0,12}(\.\d{0,2})?)|(\.\d{0,2}))\z/
-  validates :salary, presence: true,
-                     format: { with: VALID_NUMBER_REGEX },
-                     numericality: {
-                       greater_than: 0.00,
-                       less_than: 999_999_999_999.99
-                     }
+  # VALID_NUMBER_REGEX = /\A((\d{0,12}(\.\d{0,2})?)|(\.\d{0,2}))\z/
+  # validates :salary, presence: true,
+  #                    format: { with: VALID_NUMBER_REGEX },
+  #                    numericality: {
+  #                      greater_than: 0.00,
+  #                      less_than: 999_999_999_999.99
+  #                    }
+  validates :salary, presence: true
+
   validates :expiry_date, presence: true
   validates :description, presence: true, length: { maximum: 1000 }
   validates :update_date, presence: true

@@ -22,15 +22,15 @@ namespace :importdb do
 
   desc 'import data to companies table'
   task companies: :environment do
-    Company.create!(
-      name:                  Faker::Company.name,
-      description:           Faker::Lorem.paragraph,
-      address:               Faker::Address.street_address,
-      email:                 Faker::Internet.email,
-      phone:                 '123-456-7890',
-      fax:                   '123-456-7890',
-      number_of_employees:   '1000 - 2000'
-    )
+    # Company.create!(
+    #   name:                  Faker::Company.name,
+    #   description:           Faker::Lorem.paragraph,
+    #   address:               Faker::Address.street_address,
+    #   email:                 Faker::Internet.email,
+    #   phone:                 '123-456-7890',
+    #   fax:                   '123-456-7890',
+    #   number_of_employees:   '1000 - 2000'
+    # )
   end
 
   desc 'seed industries data'
@@ -51,21 +51,38 @@ namespace :importdb do
     jobs_redis = Redis.new
     jobs_yaml_arr = jobs_redis.smembers 'crawled'
     jobs_yaml_arr.each_with_index do |row,id|
-      # break if id == 3
+      # break if id == 100
       job = YAML.safe_load(row)
       next if job[1].blank? || !!Job.find_by(title: job[1]) || !!Job.find_by(link: job[14])
+
+      # create job company
+      next if job[2].blank?
+      company = Company.find_by(name: job[2])
+      unless company
+        company = Company.create( name:                  job[2],
+                                  description:           Faker::Lorem.paragraph,
+                                  address:               Faker::Address.street_address,
+                                  email:                 Faker::Internet.email,
+                                  phone:                 '123-456-7890',
+                                  fax:                   '123-456-7890',
+                                  number_of_employees:   '1000 - 2000'
+                                )
+      end
+      next unless company
+
+      # create job
       job_new = Job.create!(
-                  title: job[1],
-                  company_id: 1,
-                  position: 'NA',
-                  salary: '1_000',
-                  expiry_date: Time.now,
-                  description: 'NA',
-                  update_date: Time.now,
-                  published: true,
-                  welfare: 'NA',
-                  condition: 'NA',
-                  link: job[14]
+                  title:        job[1],
+                  company_id:   company.id,
+                  position:     'NA',
+                  salary:       job[7],
+                  expiry_date:  Time.now,
+                  description:  job[10],
+                  update_date:  Time.now,
+                  published:    true,
+                  welfare:      'NA',
+                  condition:    'NA',
+                  link:         job[14]
                 )
       # import job industry
       industry_arr = job[5].split('+').map { |ind| ind.strip }
@@ -78,7 +95,7 @@ namespace :importdb do
         job_new.industries_jobs.create!(industry_id: City.first.id)
       end
 
-      # import job industry
+      # import job city
       city_arr = job[3].split(',').map { |city| city.strip }
       if city_arr.any?
         city_arr.each do |city|

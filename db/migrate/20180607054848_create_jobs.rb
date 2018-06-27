@@ -4,7 +4,8 @@ class CreateJobs < ActiveRecord::Migration[5.2]
       t.string :title, index: true
       t.references :company, foreign_key: true
       t.string :position
-      t.decimal :salary, precision: 12, scale: 2
+      # t.decimal :salary, precision: 12, scale: 2
+      t.string :salary
       t.datetime :expiry_date
       t.text :description
       t.datetime :update_date

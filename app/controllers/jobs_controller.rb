@@ -26,6 +26,7 @@ class JobsController < ApplicationController
 
   def home
     @jobs = Job.all.order(updated_at: :desc).take(5)
-    @cities = City.all.select { |city| city.jobs.any? }.take(8)
+    @cities = City.all.select { |city| city.jobs.any? }.take(9)
+    @industries = Industry.all.select { |industry| industry.jobs.any? }.take(9)
   end
 end
