@@ -1,13 +1,15 @@
 Rails.application.routes.draw do
   root to: 'jobs#home'
-  resources :entries, only: [:new, :create, :show, :edit, :update]
+  resources :entries,     only: [:new, :create, :show, :edit, :update]
+  resources :cities,      only: :index
+  resources :industries,  only: :index
 
   get '/apply', to: 'entries#new'
   resources :jobs do
     collection do
       get 'home'
-      get 'city'
-      get 'city/:slug', to: 'jobs#jobs_in_city'
+      get 'city/:search',     to: 'jobs#index'
+      get 'industry/:search', to: 'jobs#index'
       get 'search'
     end
   end

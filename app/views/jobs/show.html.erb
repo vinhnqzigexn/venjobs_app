@@ -2,7 +2,6 @@
   <aside class="col-md-16">
     <section class="user_info">
 
-      
       <h4>
         <%= @job.title %> 
       </h4>
@@ -14,7 +13,7 @@
       <table class="table table-hover">
         <tbody>
           <tr>
-            <th scope="row col-8">Job title</th>
+            <th scope="row">Job title</th>
             <td><%= @job.title %></td>
           </tr>
           <tr>
@@ -23,21 +22,21 @@
           </tr>
           <tr>
             <th scope="row">Location</th>
-            <td colspan="2">
+            <td>
               <%= @job.cities.map(&:name).reject(&:blank?).join(', ') %>
             </td>
           </tr>
           <tr>
             <th scope="row">Salary</th>
-            <td colspan="2"><%= @job.salary %></td>
+            <td><%= @job.salary %></td>
           </tr>
           <tr>
             <th scope="row">Description</th>
-            <td colspan="2"><%= @job.description %></td>
+            <td><%= @job.description %></td>
           </tr>
         </tbody>
       </table>
-      
+
       <%= link_to "Apply",  apply_path(job_id: @job.id),
                             class: "btn btn-secondary" %>
       <%= link_to 'Back', :back, class: "btn btn-secondary" %>

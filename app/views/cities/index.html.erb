@@ -1,0 +1,15 @@
+<h3>Location</h3>
+
+  <div class="container">
+    <div class="row">
+      <% @cities.each do |city| %>
+        <div class="col-6 col-md-4 list-group-item">
+          <%= city.name %>
+          <%= link_to pluralize(city.jobs.count, 'job'),
+                      controller: 'jobs',
+                      action: 'index',
+                      search: "#{city.name}" %>
+        </div>
+      <% end %>
+    </div>
+  </div><br>

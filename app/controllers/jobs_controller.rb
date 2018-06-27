@@ -2,7 +2,7 @@
 
 class JobsController < ApplicationController
   def index
-    search_str = params[:search].blank? ? '*' : params[:search]
+    search_str = search_filter
     job_found = Job.search(kw: search_str, page: params[:page].to_i)
     job_ids = job_found[:job_id]
     @job_num = job_found[:num]
@@ -19,14 +19,17 @@ class JobsController < ApplicationController
     @cities = City.all.select { |city| city.jobs.any? }
   end
 
-  def jobs_in_city
-    @city = City.find_by(slug: params[:slug])
-    @jobs = @city.jobs.page(params[:page])
-  end
-
   def home
     @jobs = Job.all.order(updated_at: :desc).take(5)
     @cities = City.all.select { |city| city.jobs.any? }.take(9)
     @industries = Industry.all.select { |industry| industry.jobs.any? }.take(9)
+  end
+
+  private
+
+  def search_filter
+    params.permit(:search)
+    s = params[:search].blank? ? '*' : params[:search]
+    s.gsub(/[\/]/,'*')
   end
 end

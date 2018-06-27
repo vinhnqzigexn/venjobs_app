@@ -32,8 +32,8 @@
           <%= city.name %>
           <%= link_to pluralize(city.jobs.count, 'job'),
                       controller: 'jobs',
-                      action: 'jobs_in_city',
-                      slug: city.slug %>
+                      action: 'index',
+                      search: city.name %>
         </div>
       <% end %>
     </div>
@@ -47,8 +47,8 @@
           <%= industry.name %>
           <%= link_to pluralize(industry.jobs.count, 'job'),
                       controller: 'jobs',
-                      action: 'jobs_in_city',
-                      slug: industry.slug %>
+                      action: 'index',
+                      search: industry.name %>
         </div>
       <% end %>
     </div>

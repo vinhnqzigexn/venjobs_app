@@ -1,0 +1,15 @@
+<h1>Industries</h1>
+
+<div class="container">
+  <div class="row">
+    <% @industries.each do |industry| %>
+      <div class="col-6 col-md-4 list-group-item">
+        <%= industry.name %>
+        <%= link_to pluralize(industry.jobs.count, 'job'),
+                    controller: 'jobs',
+                    action: 'index',
+                    search: "#{industry.slug}" %>
+      </div>
+    <% end %>
+  </div>
+</div><br>
