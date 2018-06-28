@@ -9,6 +9,8 @@ require "capistrano/passenger"
 require "capistrano/rbenv"
 require "capistrano/yarn"
 require "capistrano/bundler"
+require 'capistrano/rails/migrations'
+require 'capistrano/rails/assets'
 
 # rbenv
 set :rbenv_type, :user
