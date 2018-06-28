@@ -62,7 +62,7 @@
 
 set :stage, :production
 set :rails_env, :production
-set :branch, "master"
+set :branch, "test-capistrano"
 
 # server "<MACHINE_IP>", user: "<LOGIN_USER>", roles: %w{app db web}
 server "192.168.1.74", user: "admin", roles: %w{app db web}
