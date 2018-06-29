@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  resources :admins
+  
+  get '/admin/login',     to: 'admins#new'
+  post '/admin/login',    to: 'admins#create'
+  get '/admin/applies',   to: 'admins#index'
+  delete '/logout',       to: 'admins#destroy'
+
+
   root to: 'jobs#home'
   resources :entries,     only: [:new, :create, :show, :edit, :update]
   resources :cities,      only: :index
