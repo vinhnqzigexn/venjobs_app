@@ -24,37 +24,37 @@ class EntriesController < ApplicationController
   # POST /entries.json
   def create
     @entry = Entry.new(entry_params)
-      render :new and return unless @entry.valid?
+    render(:new) && return unless @entry.valid?
 
-      @job = Job.find(params[:job_id])
+    @job = Job.find(params[:job_id])
 
-      @user = User.find_by(email: params[:entry][:entry_email])
-      unless @user
-        random_password = Devise.friendly_token
-        @user = User.new(name:   params[:entry][:entry_name],
-                        email:   params[:entry][:entry_email],
-                        phone:   params[:entry][:entry_phone],
-                        address: params[:entry][:entry_address],
-                        password:              random_password,
-                        password_confirmation: random_password)
-        render :new and return unless @user.valid?
-        @user.skip_confirmation!
-        @user.save
-      end
+    @user = User.find_by(email: params[:entry][:entry_email])
+    unless @user
+      random_password = Devise.friendly_token
+      @user = User.new(name:   params[:entry][:entry_name],
+                       email:   params[:entry][:entry_email],
+                       phone:   params[:entry][:entry_phone],
+                       address: params[:entry][:entry_address],
+                       password:              random_password,
+                       password_confirmation: random_password)
+      render(:new) && return unless @user.valid?
+      @user.skip_confirmation!
+      @user.save
+    end
 
-      @entry.user_id = @user.id
-      @entry.job_id = @job.id
+    @entry.user_id = @user.id
+    @entry.job_id = @job.id
 
-      if @user.jobs.find_by(id: @job.id)
-        redirect_to job_url(@job), flash: { secondary: 'You has been entry this job.' }
+    if @user.jobs.find_by(id: @job.id)
+      redirect_to job_url(@job), flash: { secondary: 'You has been entry this job.' }
+    else
+      if @entry.save
+        UserMailer.job_apply(@user, @job).deliver_now
+        redirect_to @entry, flash: { secondary: 'Thank you for apply. Please check your email.' }
       else
-        if @entry.save
-          UserMailer.job_apply(@user, @job).deliver_now
-          redirect_to @entry, flash: { secondary: 'Thank you for apply. Please check your email.' }
-        else
-          render :new
-        end
+        render :new
       end
+    end
   end
 
   # PATCH/PUT /entries/1
