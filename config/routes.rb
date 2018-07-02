@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :admins
-  
+  # resources :admins
+
   get '/admin/login',     to: 'admins#new'
   post '/admin/login',    to: 'admins#create'
   get '/admin/applies',   to: 'admins#index'

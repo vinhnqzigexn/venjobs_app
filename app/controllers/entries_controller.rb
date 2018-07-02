@@ -24,7 +24,7 @@ class EntriesController < ApplicationController
   # POST /entries.json
   def create
     @entry = Entry.new(entry_params)
-    render(:new) && return unless @entry.valid?
+    # render(:new) && return unless @entry.valid?
 
     @job = Job.find(params[:job_id])
 
