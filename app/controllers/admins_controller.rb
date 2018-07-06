@@ -20,11 +20,34 @@ class AdminsController < ApplicationController
 
 
   def index
+    start_date =
+      if params[:start_date]
+        Time.zone.local( params[:start_date][:year],
+                                  params[:start_date][:month],
+                                  params[:start_date][:day])
+      else 
+        1.year.ago
+      end
+
+    end_date =
+      if params[:end_date]
+        Time.zone.local(params[:end_date][:year],
+                                params[:end_date][:month],
+                                params[:end_date][:day])
+      else
+        Time.now
+      end
+
     job_ids = Entry.all.map(&:job_id)
-    # @jobs = Job.where(id: job_ids).page(params[:page])
     @jobs = Job.all
     @cities = City.all
     @industries = Industry.all
+    # binding.pry
+    @entries  = Entry.search( email: params[:email],
+                              city_id: params[:city_id],
+                              industry_id: params[:industry_id],
+                              start_date: start_date,
+                              end_date: end_date ).page(params[:page])
   end
 
   def destroy

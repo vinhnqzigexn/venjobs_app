@@ -61,6 +61,8 @@ ActiveRecord::Schema.define(version: 2018_06_29_033452) do
     t.string "entry_email"
     t.string "entry_phone"
     t.text "entry_address"
+    t.string "city"
+    t.string "industry"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_entries_on_job_id"

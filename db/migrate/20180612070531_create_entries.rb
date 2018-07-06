@@ -7,6 +7,8 @@ class CreateEntries < ActiveRecord::Migration[5.2]
       t.string :entry_email
       t.string :entry_phone
       t.text :entry_address
+      t.string :city
+      t.string :industry
 
       t.timestamps
     end

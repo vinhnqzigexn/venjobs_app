@@ -1,0 +1,9 @@
+<div class='card' style='width: 40rem;'>
+  <span class='card-body'>
+    <h4 class='card-title'><%= link_to entry.job.title, entry.job %></h4>
+    <p class='card-text'>Name: <%= entry.entry_name %></p>
+    <p class='card-text'>Location: <%= entry.job.cities.map(&:name).reject(&:blank?).join(', ')%></p>
+    <span class='card-text col-md-4'>Email: <%= entry.entry_email %></span>
+    <span class='card-text col-md-4'>Applied date: <%= entry.created_at.strftime("%Y-%m-%d") %></span>
+</div>
+<br>
